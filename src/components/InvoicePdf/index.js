@@ -38,7 +38,7 @@ export function useInvoicePdf(props) {
 
 export function InvoicePdfPreview({ isMobile, currentMobileTab, ...props }) {
 	if (isMobile && !Boolean(currentMobileTab)) {
-		return null;
+		return <> </>;
 	}
 	return (
 		<Grid.Column>
