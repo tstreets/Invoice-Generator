@@ -1,41 +1,10 @@
 import React from 'react';
 import { Form, Grid, Segment } from 'semantic-ui-react';
-
-const InvoiceFormContext = React.createContext();
-
-function InvoiceInput({ name, parentName, onChange, ...restOfProps }) {
-	const { invoiceInfo, setInvoiceInfo } = React.useContext(InvoiceFormContext);
-
-	function handleChange(e, { value }) {
-		if (parentName) {
-			setInvoiceInfo({ ...invoiceInfo, [parentName]: { ...invoiceInfo[parentName], [name]: value } });
-		} else {
-			setInvoiceInfo({ ...invoiceInfo, [name]: value });
-		}
-	}
-
-	return (
-		<Form.Input
-			name={name}
-			value={parentName ? invoiceInfo[parentName][name] : invoiceInfo[name]}
-			onChange={onChange ? onChange : handleChange}
-			{...restOfProps}
-		/>
-	);
-}
+import useInvoiceInfo from '@/useHooks/useInvoiceInfo';
+import InvoiceInput from './InvoiceInput';
 
 export default function InvoiceForm({ isMobile, currentMobileTab }) {
-	const [invoiceInfo, setInvoiceInfo] = React.useState({
-		filename: '',
-		companyName: '',
-		companyAddress: {
-			street: '',
-			city: '',
-			state: '',
-			zip: '',
-		},
-		companyPhone: '',
-	});
+	const { invoiceInfo, setInvoiceInfo } = useInvoiceInfo();
 	if (isMobile && Boolean(currentMobileTab)) {
 		return <></>;
 	}
@@ -65,7 +34,7 @@ export default function InvoiceForm({ isMobile, currentMobileTab }) {
 	}
 
 	return (
-		<InvoiceFormContext.Provider value={{ invoiceInfo, setInvoiceInfo }}>
+		<>
 			<Grid.Column>
 				<Segment>
 					<Form>
@@ -92,6 +61,6 @@ export default function InvoiceForm({ isMobile, currentMobileTab }) {
 					</Form>
 				</Segment>
 			</Grid.Column>
-		</InvoiceFormContext.Provider>
+		</>
 	);
 }
